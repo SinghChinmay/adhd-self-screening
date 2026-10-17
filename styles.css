@@ -285,16 +285,52 @@ button{ font-family:inherit; }
 }
 
 /* ---------------- focus mode (during the questionnaire) ---------------- */
+body.focus{ padding:0; overflow-x:hidden; }
 body.focus .hero,
 body.focus .foot{ display:none; }
-body.focus .wrap{ padding-top:calc(14px + var(--safe-t)); }
-body.focus .card{ padding:20px; }
+body.focus .wrap{
+  min-height:100dvh;
+  max-width:960px;
+  display:flex;
+  flex-direction:column;
+  padding:calc(16px + var(--safe-t)) 16px calc(16px + var(--safe-b));
+}
+body.focus #app{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+#app[hidden]{ display:none !important; }
+body.focus #app .card{ margin:auto 0; }
+body.focus #app .nav{ margin-top:auto; }
+body.focus .progress-mini{ margin-top:2px; }
+
+/* roomier question layout on larger screens */
+@media (min-width:600px){
+  body.focus #app .card{ padding:34px 38px; }
+  body.focus .q-text{ font-size:clamp(20px,2.3vw,27px); }
+  body.focus .q-eyebrow{ margin-bottom:14px; }
+  body.focus .scale{ gap:12px; margin-bottom:14px; }
+  body.focus .opt .opt-face{ min-height:108px; padding:16px 8px; }
+  body.focus .opt .opt-num{ font-size:26px; }
+  body.focus .opt .opt-lab{ font-size:13px; }
+  body.focus .pills{ gap:12px; }
+  body.focus .pill .pill-face{ min-height:52px; padding:13px 22px; font-size:15px; }
+  body.focus .nav{ margin-top:auto; padding-top:20px; }
+  body.focus .btn{ padding:16px 30px; min-height:56px; font-size:16px; }
+}
+
+/* centered reading column for tall forms stays comfortable */
+@media (min-width:900px){
+  body.focus .wrap{ padding-left:24px; padding-right:24px; }
+}
 
 .setting-row{
   display:flex; align-items:center; gap:10px; margin:18px 0 4px;
   font-size:13.5px; color:var(--ink-soft); cursor:pointer;
 }
 .setting-row input{ width:auto; accent-color:var(--accent); cursor:pointer; }
+
 
 /* ---------------- footer ---------------- */
 .foot{ margin-top:26px; }
