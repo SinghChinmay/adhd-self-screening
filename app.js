@@ -223,7 +223,6 @@ function buildSteps() {
   STEPS = [];
   STEPS.push({ kind: 'intro' });
 
-  STEPS.push(sectionStep('About You', 'about'));
   STEPS.push({
     kind: 'fields', id: 'demo', section: 'about',
     fields: [
@@ -358,19 +357,20 @@ function progressHTML(step) {
   for (let i = 0; i < idx; i++) if (isQuestionKind(STEPS[i].kind)) answered++;
   const shown = Math.min(answered + 1, total);
   const pct = Math.round(answered / total * 100);
-  const meta = step && step.section && sectionMeta[step.section];
-  const label = step && step.kind === 'final' ? 'Done' : (step && step.kind === 'intro' ? 'Start' : (meta ? meta.title : ''));
   return '' +
-    '<div class="progress-head">' +
-    '<span class="sec-name">' + esc(label) + '</span>' +
-    '<span>Question ' + shown + ' of ' + total + '</span>' +
-    '</div>' +
-    '<div class="progress-track"><i style="width:' + pct + '%"></i></div>';
+    '<div class="progress-mini" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+    '<div class="progress-count">' + (step && step.kind === 'final' ? 'Done' : shown + ' of ' + total) + '</div>';
+}
+
+function setFocusMode(on) {
+  document.body.classList.toggle('focus', !!on);
 }
 
 function renderStep() {
   const step = STEPS[idx];
   let inner = '';
+
+  setFocusMode(step.kind !== 'intro');
 
   if (step.kind === 'intro') { renderIntro(); return; }
   if (step.kind === 'section') { renderSection(step); return; }
@@ -408,6 +408,7 @@ function renderIntro() {
     '<li><span class="dot">\u2713</span><span>On rating questions, just tap a number and it moves on automatically.</span></li>' +
     '<li><span class="dot">\u2713</span><span>Keyboard: <span class="kbd">1</span>\u2013<span class="kbd">5</span> to rate, <span class="kbd">\u2190</span>/<span class="kbd">\u2192</span> to move, <span class="kbd">Enter</span> for next.</span></li>' +
     '</ul>' +
+    '<label class="setting-row"><input type="checkbox" id="autoChkIntro"' + (autoAdvance ? ' checked' : '') + '><span>Auto-advance to the next question after I answer</span></label>' +
     '<div class="nav">' +
     (hasProgress ?
       '<button type="button" class="btn btn-ghost" id="freshBtn">Start over</button>' +
@@ -422,6 +423,8 @@ function renderIntro() {
   const begin = document.getElementById('beginBtn');
   const resume = document.getElementById('resumeBtn');
   const fresh = document.getElementById('freshBtn');
+  const autoIntro = document.getElementById('autoChkIntro');
+  if (autoIntro) autoIntro.addEventListener('change', function () { autoAdvance = autoIntro.checked; save(); });
   if (begin) begin.addEventListener('click', function () { answers = {}; idx = 1; save(); renderStep(); });
   if (resume) resume.addEventListener('click', function () {
     const s = loadSaved();
@@ -455,7 +458,7 @@ function renderSection(step) {
 }
 
 function renderFields(step) {
-  let h = '<p class="q-eyebrow">About You</p><h2 class="q-text" style="font-size:20px">' + esc('A few details') + '</h2><p class="q-help">These stay on your device and only appear in your own summary.</p>';
+  let h = '<p class="q-eyebrow">About You</p><h2 class="q-text" style="font-size:20px">' + esc('A few details') + '</h2>';
   const d = answers[step.id] || {};
   step.fields.forEach(function (f) {
     const val = d[f.name] != null ? d[f.name] : (f.value || '');
@@ -478,7 +481,6 @@ function renderScale(step) {
   const cur = answers[step.id];
   let h = '<p class="q-eyebrow">' + esc(step.num) + '</p>' +
     '<p class="q-text">' + esc(step.text) + '</p>' +
-    '<p class="q-help">Over the past 6 months, how often has this applied to you?</p>' +
     '<div class="scale" role="radiogroup" aria-label="' + esc(step.num + ' ' + step.text) + '">';
   FREQ.forEach(function (lab, i) {
     h += '<label class="opt">' +
@@ -499,7 +501,6 @@ function renderChoice(step) {
   const cur = answers[step.id];
   let h = '<p class="q-eyebrow">' + (step.num ? esc(step.num) : '') + '</p>' +
     '<p class="q-text">' + esc(step.text) + '</p>' +
-    '<p class="q-help">Choose the closest answer.</p>' +
     '<div class="pills" role="radiogroup" aria-label="' + esc(step.text) + '">';
   step.opts.forEach(function (o) {
     h += '<label class="pill">' +
@@ -567,10 +568,7 @@ function renderNav(step) {
     '<div class="spacer"></div>' +
     (showSkip ? '<button type="button" class="btn btn-text" id="skipBtn">Skip</button>' : '') +
     '<button type="button" class="btn btn-primary" id="nextBtn">' + (isLastQuestion() ? 'See results \u2192' : 'Next \u2192') + '</button>' +
-    '</div>' +
-    '<p class="hintline no-print">' +
-    '<label style="cursor:pointer"><input type="checkbox" id="autoChk"' + (autoAdvance ? ' checked' : '') + ' style="width:auto;margin-right:6px;vertical-align:middle">Auto-advance after answering</label>' +
-    '</p>';
+    '</div>';
 }
 
 function isLastQuestion() {

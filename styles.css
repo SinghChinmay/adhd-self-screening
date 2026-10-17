@@ -1,61 +1,37 @@
 /* ============================================================
    ADHD Self-Screening Questionnaire — styles
-   Mobile-first. Light + dark. Print-friendly.
+   Mobile-first. Dark theme. Print-friendly.
    ============================================================ */
 
 :root{
-  --bg:#eef1f7;
-  --bg-soft:#f7f9fc;
-  --card:#ffffff;
-  --ink:#1c2230;
-  --ink-soft:#3c4457;
-  --muted:#667085;
-  --line:#e2e7ef;
-  --line-strong:#cdd5e2;
-  --accent:#4f46e5;
-  --accent-2:#7c3aed;
-  --accent-soft:#eef0ff;
-  --green:#0f9d58;
-  --green-soft:#f0fdf4;
-  --amber:#d97706;
-  --amber-soft:#fffbeb;
-  --red:#dc2626;
-  --red-soft:#fef2f2;
-  --blue:#2563eb;
-  --blue-soft:#eff6ff;
-  --gray:#6b7280;
-  --shadow:0 1px 2px rgba(16,24,40,.05), 0 8px 24px -12px rgba(16,24,40,.18);
+  color-scheme:dark;
+  --bg:#0d1117;
+  --bg-soft:#161b22;
+  --card:#161b22;
+  --ink:#e8edf5;
+  --ink-soft:#c6cede;
+  --muted:#9aa4b5;
+  --line:#252c37;
+  --line-strong:#333b48;
+  --accent:#7c83ff;
+  --accent-2:#a78bfa;
+  --accent-fill:#6366f1;
+  --accent-soft:#1d2140;
+  --green:#34d399;
+  --green-soft:#10241b;
+  --amber:#fbbf24;
+  --amber-soft:#2a210c;
+  --red:#f87171;
+  --red-soft:#2a1414;
+  --blue:#60a5fa;
+  --blue-soft:#10203a;
+  --gray:#9ca3af;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
   --radius:16px;
   --radius-sm:11px;
   --maxw:860px;
   --safe-b:env(safe-area-inset-bottom,0px);
   --safe-t:env(safe-area-inset-top,0px);
-}
-
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0d1117;
-    --bg-soft:#161b22;
-    --card:#161b22;
-    --ink:#e8edf5;
-    --ink-soft:#c6cede;
-    --muted:#9aa4b5;
-    --line:#252c37;
-    --line-strong:#333b48;
-    --accent:#7c83ff;
-    --accent-2:#a78bfa;
-    --accent-soft:#1d2140;
-    --green:#34d399;
-    --green-soft:#10241b;
-    --amber:#fbbf24;
-    --amber-soft:#2a210c;
-    --red:#f87171;
-    --red-soft:#2a1414;
-    --blue:#60a5fa;
-    --blue-soft:#10203a;
-    --gray:#9ca3af;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
-  }
 }
 
 *{box-sizing:border-box}
@@ -76,7 +52,7 @@ body{
 
 .skip-link{
   position:absolute; left:-999px; top:0; z-index:100;
-  background:var(--accent); color:#fff; padding:10px 16px; border-radius:0 0 10px 0;
+  background:var(--accent-fill); color:#fff; padding:10px 16px; border-radius:0 0 10px 0;
   text-decoration:none; font-weight:600;
 }
 .skip-link:focus{ left:0; }
@@ -90,7 +66,7 @@ body{
 /* ---------------- hero ---------------- */
 .hero{
   position:relative;
-  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
   color:#fff;
   border-radius:var(--radius);
   padding:26px 22px;
@@ -127,6 +103,20 @@ body{
 }
 
 /* ---------------- progress ---------------- */
+.progress-mini{
+  position:sticky; top:0; z-index:20;
+  height:4px; background:var(--line); border-radius:20px; overflow:hidden;
+  margin:0 0 6px;
+}
+.progress-mini > i{
+  display:block; height:100%; width:0; border-radius:20px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  transition:width .35s cubic-bezier(.3,.8,.4,1);
+}
+.progress-count{
+  text-align:right; font-size:11.5px; font-weight:700; letter-spacing:.4px;
+  color:var(--muted); margin-bottom:14px;
+}
 .progress-head{
   display:flex; align-items:center; justify-content:space-between; gap:12px;
   margin-bottom:9px; font-size:12.5px; font-weight:700; color:var(--muted);
@@ -168,8 +158,8 @@ body{
 .opt .opt-lab{ font-size:11px; color:var(--muted); line-height:1.2; }
 .opt:hover .opt-face{ border-color:var(--line-strong); transform:translateY(-1px); }
 .opt input:checked + .opt-face{
-  background:var(--accent); border-color:var(--accent); color:#fff;
-  box-shadow:0 6px 16px -6px var(--accent);
+  background:var(--accent-fill); border-color:var(--accent-fill); color:#fff;
+  box-shadow:0 6px 16px -6px var(--accent-fill);
 }
 .opt input:checked + .opt-face .opt-lab{ color:rgba(255,255,255,.9); }
 .opt input:focus-visible + .opt-face{ outline:3px solid var(--accent-soft); outline-offset:2px; }
@@ -199,7 +189,7 @@ body{
   font-size:14.5px; font-weight:600; cursor:pointer; transition:.14s; user-select:none;
 }
 .pill:hover .pill-face{ border-color:var(--line-strong); }
-.pill input:checked + .pill-face{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.pill input:checked + .pill-face{ background:var(--accent-fill); border-color:var(--accent-fill); color:#fff; }
 .pill input:focus-visible + .pill-face{ outline:3px solid var(--accent-soft); outline-offset:2px; }
 
 /* ---------------- checkbox lists ---------------- */
@@ -278,7 +268,7 @@ button{ font-family:inherit; }
   display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:50px;
 }
 .btn:active{ transform:translateY(1px); }
-.btn-primary{ background:var(--accent); color:#fff; flex:1; min-width:170px; box-shadow:0 8px 20px -10px var(--accent); }
+.btn-primary{ background:var(--accent-fill); color:#fff; flex:1; min-width:170px; box-shadow:0 8px 20px -10px var(--accent-fill); }
 .btn-primary:hover{ background:color-mix(in srgb,var(--accent) 88%, #000); }
 .btn-primary:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; }
 .btn-ghost{ background:var(--card); color:var(--ink); border-color:var(--line); }
@@ -293,6 +283,18 @@ button{ font-family:inherit; }
   border:1px solid var(--line-strong); border-bottom-width:2px; border-radius:5px;
   padding:1px 6px; color:var(--muted); background:var(--bg-soft);
 }
+
+/* ---------------- focus mode (during the questionnaire) ---------------- */
+body.focus .hero,
+body.focus .foot{ display:none; }
+body.focus .wrap{ padding-top:calc(14px + var(--safe-t)); }
+body.focus .card{ padding:20px; }
+
+.setting-row{
+  display:flex; align-items:center; gap:10px; margin:18px 0 4px;
+  font-size:13.5px; color:var(--ink-soft); cursor:pointer;
+}
+.setting-row input{ width:auto; accent-color:var(--accent); cursor:pointer; }
 
 /* ---------------- footer ---------------- */
 .foot{ margin-top:26px; }
@@ -337,7 +339,7 @@ button{ font-family:inherit; }
   border:1.5px solid var(--line); background:var(--bg-soft); color:var(--ink-soft);
   padding:9px 16px; border-radius:22px; font-size:13.5px; font-weight:700; cursor:pointer; min-height:42px;
 }
-.seg-tabs button.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.seg-tabs button.active{ background:var(--accent-fill); border-color:var(--accent-fill); color:#fff; }
 .share-btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
 
 .disclaimer{
